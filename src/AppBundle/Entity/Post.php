@@ -12,20 +12,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
- * @ORM\Table(name="symfony_demo_post")
- *
- * Defines the properties of the Post entity to represent the blog posts.
- *
- * See https://symfony.com/doc/current/book/doctrine.html#creating-an-entity-class
- *
- * Tip: if you have an existing database, you can generate these entity class automatically.
- * See https://symfony.com/doc/current/cookbook/doctrine/reverse_engineering.html
- *
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  * @author Yonel Ceruto <yonelceruto@gmail.com>
@@ -42,32 +31,24 @@ class Post
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
+
      * @Assert\NotBlank
      */
     private $title;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
      */
     private $slug;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
+
      * @Assert\NotBlank(message="post.blank_summary")
      */
     private $summary;
@@ -75,7 +56,6 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(type="text")
      * @Assert\NotBlank(message="post.blank_content")
      * @Assert\Length(min=10, minMessage="post.too_short_content")
      */
@@ -84,37 +64,23 @@ class Post
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
      * @Assert\DateTime
      */
     private $publishedAt;
 
     /**
      * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $author;
 
     /**
      * @var Comment[]|ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *      targetEntity="Comment",
-     *      mappedBy="post",
-     *      orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"publishedAt": "DESC"})
      */
     private $comments;
 
     /**
      * @var Tag[]|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Tag", cascade={"persist"})
-     * @ORM\JoinTable(name="symfony_demo_post_tag")
-     * @ORM\OrderBy({"name": "ASC"})
      * @Assert\Count(max="4", maxMessage="post.too_many_tags")
      */
     private $tags;
