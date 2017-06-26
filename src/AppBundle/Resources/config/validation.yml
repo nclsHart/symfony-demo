@@ -1,0 +1,36 @@
+AppBundle\Entity\Post:
+    properties:
+        title:
+            - NotBlank: ~
+        summary:
+            - NotBlank:
+                message: 'post.blank_summary'
+        content:
+            - NotBlank:
+                message: 'post.blank_content'
+            - Length:
+                min: 10
+                minMessage: 'post.too_short_content'
+        publishedAt:
+            - DateTime: ~
+        tags:
+            - Count:
+                max: 4
+                maxMessage: 'post.too_many_tags'
+
+AppBundle\Entity\Comment:
+    properties:
+        content:
+            - NotBlank:
+                message: 'comment.blank'
+            - Length:
+                min: 5
+                minMessage: 'comment.too_short'
+                max: 10000
+                maxMessage: 'comment.too_long'
+        publishedAt:
+            - DateTime: ~
+    getters:
+        legitComment:
+            - IsTrue:
+               message: 'comment.is_spam'

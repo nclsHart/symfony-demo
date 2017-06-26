@@ -11,8 +11,6 @@
 
 namespace AppBundle\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
 /**
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -31,21 +29,11 @@ class Comment
 
     /**
      * @var string
-     *
-     * @Assert\NotBlank(message="comment.blank")
-     * @Assert\Length(
-     *     min=5,
-     *     minMessage="comment.too_short",
-     *     max=10000,
-     *     maxMessage="comment.too_long"
-     * )
      */
     private $content;
 
     /**
      * @var \DateTime
-     *
-     * @Assert\DateTime
      */
     private $publishedAt;
 
@@ -59,9 +47,6 @@ class Comment
         $this->publishedAt = new \DateTime();
     }
 
-    /**
-     * @Assert\IsTrue(message="comment.is_spam")
-     */
     public function isLegitComment()
     {
         $containsInvalidCharacters = false !== mb_strpos($this->content, '@');
