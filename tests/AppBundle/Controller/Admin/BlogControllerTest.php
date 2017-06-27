@@ -12,7 +12,7 @@
 namespace Tests\AppBundle\Controller\Admin;
 
 use AppBundle\DataFixtures\FixturesTrait;
-use AppBundle\Entity\Post;
+use Blog\Model\Post;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 

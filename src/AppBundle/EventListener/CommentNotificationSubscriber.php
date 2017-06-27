@@ -11,7 +11,7 @@
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Entity\Comment;
+use Blog\Model\Comment;
 use AppBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;

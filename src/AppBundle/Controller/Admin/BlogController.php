@@ -11,7 +11,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Post;
+use Blog\Model\Post;
 use AppBundle\Form\PostType;
 use AppBundle\Utils\Slugger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;

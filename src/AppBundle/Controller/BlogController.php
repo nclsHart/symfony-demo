@@ -11,8 +11,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Post;
+use Blog\Model\Comment;
+use Blog\Model\Post;
 use AppBundle\Events;
 use AppBundle\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;

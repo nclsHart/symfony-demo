@@ -11,7 +11,7 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Post;
+use Blog\Model\Post;
 use AppBundle\Form\Type\DateTimePickerType;
 use AppBundle\Form\Type\TagsInputType;
 use Symfony\Component\Form\AbstractType;

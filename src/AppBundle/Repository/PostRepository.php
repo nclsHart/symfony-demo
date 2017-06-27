@@ -11,7 +11,7 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Post;
+use Blog\Model\Post;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -37,14 +37,14 @@ class PostRepository extends EntityRepository
     public function findLatest($page = 1)
     {
         $query = $this->getEntityManager()
-            ->createQuery('
+            ->createQuery(sprintf('
                 SELECT p, a, t
-                FROM AppBundle:Post p
+                FROM %s p
                 JOIN p.author a
                 LEFT JOIN p.tags t
                 WHERE p.publishedAt <= :now
                 ORDER BY p.publishedAt DESC
-            ')
+            ', Post::class))
             ->setParameter('now', new \DateTime())
         ;
 

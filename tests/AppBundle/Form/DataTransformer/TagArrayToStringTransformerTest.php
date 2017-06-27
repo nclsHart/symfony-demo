@@ -11,7 +11,7 @@
 
 namespace Tests\AppBundle\Form\DataTransformer;
 
-use AppBundle\Entity\Tag;
+use Blog\Model\Tag;
 use AppBundle\Form\DataTransformer\TagArrayToStringTransformer;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;

@@ -11,7 +11,7 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Comment;
+use Blog\Model\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -74,10 +74,15 @@ doctrine:
         auto_generate_proxy_classes: '%kernel.debug%'
         auto_mapping: false
         mappings:
+            Blog:
+                type: xml
+                prefix: Blog\Model
+                dir: "%kernel.root_dir%/config/model/blog"
+                is_bundle: false
             AppBundle:
                 type: xml
                 prefix: AppBundle\Entity
-                dir: "%kernel.root_dir%/config/model"
+                dir: "%kernel.root_dir%/config/model/app"
 
 # Swiftmailer Configuration (used to send emails)
 # instead of configuring the mailer credentials in this file, we pull

@@ -11,7 +11,7 @@
 
 namespace AppBundle\Security;
 
-use AppBundle\Entity\Post;
+use Blog\Model\Post;
 use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

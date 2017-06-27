@@ -12,8 +12,8 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\DataFixtures\FixturesTrait;
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Post;
+use Blog\Model\Comment;
+use Blog\Model\Post;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;

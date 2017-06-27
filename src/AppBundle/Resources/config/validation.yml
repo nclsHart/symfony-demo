@@ -1,4 +1,4 @@
-AppBundle\Entity\Post:
+Blog\Model\Post:
     properties:
         title:
             - NotBlank: ~
@@ -18,7 +18,7 @@ AppBundle\Entity\Post:
                 max: 4
                 maxMessage: 'post.too_many_tags'
 
-AppBundle\Entity\Comment:
+Blog\Model\Comment:
     properties:
         content:
             - NotBlank:

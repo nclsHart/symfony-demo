@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace AppBundle\Entity;
+namespace Blog\Model;
 
+use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

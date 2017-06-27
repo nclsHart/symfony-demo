@@ -11,7 +11,7 @@
 
 namespace AppBundle\Form\Type;
 
-use AppBundle\Entity\Tag;
+use Blog\Model\Tag;
 use AppBundle\Form\DataTransformer\TagArrayToStringTransformer;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;

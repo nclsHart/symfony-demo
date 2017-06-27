@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity repository-class="AppBundle\Repository\PostRepository" name="AppBundle\Entity\Post" table="symfony_demo_post">
+  <entity repository-class="AppBundle\Repository\PostRepository" name="Blog\Model\Post" table="symfony_demo_post">
     <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>
     </id>
@@ -9,7 +9,7 @@
     <field name="summary" type="string" column="summary" precision="0" scale="0" nullable="false"/>
     <field name="content" type="text" column="content" precision="0" scale="0" nullable="false"/>
     <field name="publishedAt" type="datetime" column="publishedAt" precision="0" scale="0" nullable="false"/>
-    <one-to-many field="comments" target-entity="AppBundle\Entity\Comment" mapped-by="post" orphan-removal="true" fetch="LAZY">
+    <one-to-many field="comments" target-entity="Blog\Model\Comment" mapped-by="post" orphan-removal="true" fetch="LAZY">
       <cascade>
         <cascade-remove/>
       </cascade>
@@ -22,7 +22,7 @@
         <join-column name="author_id" referenced-column-name="id" nullable=""/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="tags" target-entity="AppBundle\Entity\Tag" fetch="LAZY">
+    <many-to-many field="tags" target-entity="Blog\Model\Tag" fetch="LAZY">
       <cascade>
         <cascade-persist/>
       </cascade>
