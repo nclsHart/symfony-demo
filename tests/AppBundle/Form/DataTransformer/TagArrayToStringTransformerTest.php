@@ -13,8 +13,7 @@ namespace Tests\AppBundle\Form\DataTransformer;
 
 use Blog\Model\Tag;
 use AppBundle\Form\DataTransformer\TagArrayToStringTransformer;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
+use Blog\Repository\TagRepository;
 
 /**
  * Tests that tags are transformed correctly using the data transformer.
@@ -107,22 +106,14 @@ class TagArrayToStringTransformerTest extends \PHPUnit\Framework\TestCase
      */
     private function getMockedTransformer($findByReturnValues = [])
     {
-        $tagRepository = $this->getMockBuilder(EntityRepository::class)
+        $tagRepository = $this->getMockBuilder(TagRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
         $tagRepository->expects($this->any())
-            ->method('findBy')
+            ->method('findByNames')
             ->will($this->returnValue($findByReturnValues));
 
-        $entityManager = $this
-            ->getMockBuilder(ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $entityManager->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValue($tagRepository));
-
-        return new TagArrayToStringTransformer($entityManager);
+        return new TagArrayToStringTransformer($tagRepository);
     }
 
     /**
