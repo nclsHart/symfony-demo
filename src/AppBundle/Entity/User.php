@@ -18,27 +18,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class User implements Author, UserInterface, \Serializable
+class User extends Author implements UserInterface, \Serializable
 {
-    /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @var string
-     */
-    private $fullName;
-
     /**
      * @var string
      */
     private $username;
-
-    /**
-     * @var string
-     */
-    private $email;
 
     /**
      * @var string
@@ -49,24 +34,6 @@ class User implements Author, UserInterface, \Serializable
      * @var array
      */
     private $roles = [];
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $fullName
-     */
-    public function setFullName($fullName)
-    {
-        $this->fullName = $fullName;
-    }
-
-    public function getFullName()
-    {
-        return $this->fullName;
-    }
 
     public function getUsername()
     {
@@ -79,19 +46,6 @@ class User implements Author, UserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
     }
 
     public function getPassword()

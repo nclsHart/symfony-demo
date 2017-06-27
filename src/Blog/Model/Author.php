@@ -2,19 +2,51 @@
 
 namespace Blog\Model;
 
-interface Author
+class Author
 {
-    public function getFullName();
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $fullName;
+
+    /**
+     * @var string
+     */
+    protected $email;
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @param string $fullName
      */
-    public function setFullName($fullName);
+    public function setFullName($fullName)
+    {
+        $this->fullName = $fullName;
+    }
 
-    public function getEmail();
+    public function getFullName()
+    {
+        return $this->fullName;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
 
     /**
      * @param string $email
      */
-    public function setEmail($email);
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
 }
