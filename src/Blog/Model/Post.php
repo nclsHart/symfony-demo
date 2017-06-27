@@ -11,7 +11,6 @@
 
 namespace Blog\Model;
 
-use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -60,7 +59,7 @@ class Post
     private $publishedAt;
 
     /**
-     * @var User
+     * @var Author
      */
     private $author;
 
@@ -136,7 +135,7 @@ class Post
     }
 
     /**
-     * @return User
+     * @return Author
      */
     public function getAuthor()
     {
@@ -144,9 +143,9 @@ class Post
     }
 
     /**
-     * @param User $author
+     * @param Author $author
      */
-    public function setAuthor(User $author)
+    public function setAuthor(Author $author)
     {
         $this->author = $author;
     }

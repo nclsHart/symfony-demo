@@ -11,8 +11,6 @@
 
 namespace Blog\Model;
 
-use AppBundle\Entity\User;
-
 /**
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -40,7 +38,7 @@ class Comment
     private $publishedAt;
 
     /**
-     * @var User
+     * @var Author
      */
     private $author;
 
@@ -85,7 +83,7 @@ class Comment
     }
 
     /**
-     * @return User
+     * @return Author
      */
     public function getAuthor()
     {
@@ -93,9 +91,9 @@ class Comment
     }
 
     /**
-     * @param User $author
+     * @param Author $author
      */
-    public function setAuthor(User $author)
+    public function setAuthor(Author $author)
     {
         $this->author = $author;
     }

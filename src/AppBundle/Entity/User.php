@@ -11,13 +11,14 @@
 
 namespace AppBundle\Entity;
 
+use Blog\Model\Author;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class User implements UserInterface, \Serializable
+class User implements Author, UserInterface, \Serializable
 {
     /**
      * @var int
