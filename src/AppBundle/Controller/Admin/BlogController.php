@@ -14,6 +14,7 @@ namespace AppBundle\Controller\Admin;
 use Blog\Model\Post;
 use AppBundle\Form\PostType;
 use AppBundle\Utils\Slugger;
+use Blog\Repository\PostRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -39,6 +40,19 @@ use Symfony\Component\HttpFoundation\Request;
 class BlogController extends Controller
 {
     /**
+     * @var PostRepository
+     */
+    private $postRepository;
+
+    /**
+     * @param PostRepository $postRepository
+     */
+    public function __construct(PostRepository $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
+    /**
      * Lists all Post entities.
      *
      * This controller responds to two different routes with the same URL:
@@ -55,8 +69,7 @@ class BlogController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $posts = $em->getRepository(Post::class)->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
+        $posts = $this->postRepository->findByAuthor($this->getUser());
 
         return $this->render('admin/blog/index.html.twig', ['posts' => $posts]);
     }
@@ -89,9 +102,7 @@ class BlogController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug($slugger->slugify($post->getTitle()));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($post);
-            $em->flush();
+            $this->postRepository->save($post);
 
             // Flash messages are used to notify the user about the result of the
             // actions. They are deleted automatically from the session as soon
@@ -118,8 +129,10 @@ class BlogController extends Controller
      * @Route("/{id}", requirements={"id": "\d+"}, name="admin_post_show")
      * @Method("GET")
      */
-    public function showAction(Post $post)
+    public function showAction($id)
     {
+        $post = $this->postRepository->findById($id);
+
         // This security check can also be performed
         // using an annotation: @Security("is_granted('show', post)")
         $this->denyAccessUnlessGranted('show', $post, 'Posts can only be shown to their authors.');
@@ -135,8 +148,10 @@ class BlogController extends Controller
      * @Route("/{id}/edit", requirements={"id": "\d+"}, name="admin_post_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Post $post, Slugger $slugger)
+    public function editAction(Request $request, $id, Slugger $slugger)
     {
+        $post = $this->postRepository->findById($id);
+
         $this->denyAccessUnlessGranted('edit', $post, 'Posts can only be edited by their authors.');
 
         $form = $this->createForm(PostType::class, $post);
@@ -144,7 +159,8 @@ class BlogController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug($slugger->slugify($post->getTitle()));
-            $this->getDoctrine()->getManager()->flush();
+
+            $this->postRepository->save($post);
 
             $this->addFlash('success', 'post.updated_successfully');
 
@@ -162,25 +178,26 @@ class BlogController extends Controller
      *
      * @Route("/{id}/delete", name="admin_post_delete")
      * @Method("POST")
-     * @Security("is_granted('delete', post)")
      *
      * The Security annotation value is an expression (if it evaluates to false,
      * the authorization mechanism will prevent the user accessing this resource).
      */
-    public function deleteAction(Request $request, Post $post)
+    public function deleteAction(Request $request, $id)
     {
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
             return $this->redirectToRoute('admin_post_index');
         }
+
+        $post = $this->postRepository->findById($id);
+
+        $this->denyAccessUnlessGranted('delete', $post);
 
         // Delete the tags associated with this blog post. This is done automatically
         // by Doctrine, except for SQLite (the database used in this application)
         // because foreign key support is not enabled by default in SQLite
         $post->getTags()->clear();
 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($post);
-        $em->flush();
+        $this->postRepository->remove($post);
 
         $this->addFlash('success', 'post.deleted_successfully');
 

@@ -50,3 +50,10 @@ services:
     slugger:
         alias: AppBundle\Utils\Slugger
         public: true
+
+    Blog\Repository\PostRepository:
+        class: AppBundle\Repository\PostRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - Blog\Model\Post
+

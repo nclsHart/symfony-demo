@@ -11,6 +11,7 @@
 
 namespace AppBundle\Repository;
 
+use Blog\Model\Author;
 use Blog\Model\Post;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
@@ -27,7 +28,7 @@ use Pagerfanta\Pagerfanta;
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class PostRepository extends EntityRepository
+class PostRepository extends EntityRepository implements \Blog\Repository\PostRepository
 {
     /**
      * @param int $page
@@ -49,6 +50,54 @@ class PostRepository extends EntityRepository
         ;
 
         return $this->createPaginator($query, $page);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Post|null
+     */
+    public function findById(int $id)
+    {
+        return parent::find($id);
+    }
+
+    /**
+     * @param string $slug
+     *
+     * @return Post|null
+     */
+    public function findOneBySlug(string $slug)
+    {
+        return parent::findOneBy(['slug' => $slug]);
+    }
+
+    /**
+     * @param Author $author
+     *
+     * @return array
+     */
+    public function findByAuthor(Author $author)
+    {
+        return parent::findBy(['author' => $author], ['publishedAt' => 'DESC']);
+    }
+
+    /**
+     * @param Post $post
+     */
+    public function save(Post $post)
+    {
+        $this->_em->persist($post);
+        $this->_em->flush($post);
+    }
+
+    /**
+     * @param Post $post
+     */
+    public function remove(Post $post)
+    {
+        $this->_em->remove($post);
+        $this->_em->flush($post);
     }
 
     private function createPaginator(Query $query, $page)

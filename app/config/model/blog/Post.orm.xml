@@ -11,7 +11,7 @@
     <field name="publishedAt" type="datetime" column="publishedAt" precision="0" scale="0" nullable="false"/>
     <one-to-many field="comments" target-entity="Blog\Model\Comment" mapped-by="post" orphan-removal="true" fetch="LAZY">
       <cascade>
-        <cascade-remove/>
+        <cascade-all/>
       </cascade>
       <order-by>
         <order-by-field name="publishedAt" direction="DESC"/>

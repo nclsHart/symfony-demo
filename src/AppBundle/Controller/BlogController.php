@@ -12,12 +12,11 @@
 namespace AppBundle\Controller;
 
 use Blog\Model\Comment;
-use Blog\Model\Post;
 use AppBundle\Events;
 use AppBundle\Form\CommentType;
+use Blog\Repository\PostRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -37,6 +36,19 @@ use Symfony\Component\HttpFoundation\Response;
 class BlogController extends Controller
 {
     /**
+     * @var PostRepository
+     */
+    private $postRepository;
+
+    /**
+     * @param PostRepository $postRepository
+     */
+    public function __construct(PostRepository $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
+    /**
      * @Route("/", defaults={"page": "1", "_format"="html"}, name="blog_index")
      * @Route("/rss.xml", defaults={"page": "1", "_format"="xml"}, name="blog_rss")
      * @Route("/page/{page}", defaults={"_format"="html"}, requirements={"page": "[1-9]\d*"}, name="blog_index_paginated")
@@ -49,8 +61,7 @@ class BlogController extends Controller
      */
     public function indexAction($page, $_format)
     {
-        $em = $this->getDoctrine()->getManager();
-        $posts = $em->getRepository(Post::class)->findLatest($page);
+        $posts = $this->postRepository->findLatest($page);
 
         // Every template name also has two extensions that specify the format and
         // engine for that template.
@@ -61,14 +72,11 @@ class BlogController extends Controller
     /**
      * @Route("/posts/{slug}", name="blog_post")
      * @Method("GET")
-     *
-     * NOTE: The $post controller argument is automatically injected by Symfony
-     * after performing a database query looking for a Post with the 'slug'
-     * value given in the route.
-     * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
      */
-    public function postShowAction(Post $post)
+    public function postShowAction($slug)
     {
+        $post = $this->postRepository->findOneBySlug($slug);
+
         // Symfony provides a function called 'dump()' which is an improved version
         // of the 'var_dump()' function. It's useful to quickly debug the contents
         // of any variable, but it's not available in the 'prod' environment to
@@ -86,14 +94,11 @@ class BlogController extends Controller
      * @Route("/comment/{postSlug}/new", name="comment_new")
      * @Method("POST")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     * @ParamConverter("post", options={"mapping": {"postSlug": "slug"}})
-     *
-     * NOTE: The ParamConverter mapping is required because the route parameter
-     * (postSlug) doesn't match any of the Doctrine entity properties (slug).
-     * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html#doctrine-converter
      */
-    public function commentNewAction(Request $request, Post $post, EventDispatcherInterface $eventDispatcher)
+    public function commentNewAction(string $postSlug, Request $request, EventDispatcherInterface $eventDispatcher)
     {
+        $post = $this->postRepository->findOneBySlug($postSlug);
+
         $comment = new Comment();
         $comment->setAuthor($this->getUser());
         $post->addComment($comment);
@@ -102,9 +107,7 @@ class BlogController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($comment);
-            $em->flush();
+            $this->postRepository->save($post);
 
             // When triggering an event, you can optionally pass some information.
             // For simple applications, use the GenericEvent object provided by Symfony
@@ -134,15 +137,12 @@ class BlogController extends Controller
      * blog/post_show.html.twig template. That's why it's not needed to define
      * a route name for it.
      *
-     * The "id" of the Post is passed in and then turned into a Post object
-     * automatically by the ParamConverter.
-     *
-     * @param Post $post
-     *
      * @return Response
      */
-    public function commentFormAction(Post $post)
+    public function commentFormAction($id)
     {
+        $post = $this->postRepository->findById($id);
+
         $form = $this->createForm(CommentType::class);
 
         return $this->render('blog/_comment_form.html.twig', [
